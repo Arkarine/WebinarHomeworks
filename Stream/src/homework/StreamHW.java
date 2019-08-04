@@ -55,8 +55,10 @@ public class StreamHW {
 
     public static Integer sum(List<Integer> integers) {
         Integer sum = integers.stream()
-                .reduce(Integer::sum)
-                .orElse(0);
+//                .reduce(Integer::sum)
+//                .orElse(0);      OR
+                .mapToInt(Integer::new)
+                .sum();
         return sum;
     }
 
@@ -83,12 +85,12 @@ public class StreamHW {
         return collect;
     }
 
-
     public static String separateNamesByComma(List<User> users) {
         String result = users.stream()
                 .map(User::getName)
-                .reduce((a, b) -> a + ", " + b)
-                .orElse("");
+//                .reduce((a, b) -> a + ", " + b)
+//                .orElse("");           OR
+                .collect(Collectors.joining(", "));
         return result;
     }
 
@@ -103,16 +105,20 @@ public class StreamHW {
     public static Integer getMaxAge(List<User> users) {
         Integer max = users.stream()
                 .map(User::getAge)
-                .reduce((s1, s2) -> s1 < s2 ? s2 : s1)
-                .orElse(0);
+//                .reduce((s1, s2) -> s1 < s2 ? s2 : s1)
+//                .orElse(0);   OR
+                .max(Integer::compareTo)
+                .get();
         return max;
     }
 
     public static Integer getMinAge(List<User> users) {
         Integer min = users.stream()
                 .map(User::getAge)
-                .reduce((s1, s2) -> s1 < s2 ? s1 : s2)
-                .orElse(0);
+//                .reduce((s1, s2) -> s1 < s2 ? s1 : s2)
+//                .orElse(0);
+                .min(Integer::compareTo)
+                .get();
         return min;
     }
 
@@ -156,7 +162,6 @@ public class StreamHW {
     }
 
     public static Optional<User> findAny(List<User> users, String name) {
-
         Optional<User> any = users.stream()
                 .filter(user -> user.getName().equals(name))
                 .findAny();
@@ -175,7 +180,6 @@ public class StreamHW {
         return boxed;
     }
 
-
     public static List<Integer> generateFirst10PrimeNumbers() {
         List<Integer> list = new ArrayList<>(10);
         int count = 10;
@@ -190,11 +194,9 @@ public class StreamHW {
         return list;
     }
 
-
     public static boolean isPrime(int number) {
         return IntStream.rangeClosed(2, number / 2).noneMatch(i -> number % i == 0);
     }
-
 
     public static List<Integer> generate10RandomNumbers() {
         Random random = new Random();
@@ -206,10 +208,15 @@ public class StreamHW {
     }
 
     public static User findOldest(List<User> users) {
-        List<User> sorted = users.stream()
-                .sorted((a, b) -> a.getAge().compareTo(b.getAge()))
-                .collect(Collectors.toList());
-        return sorted.get(sorted.size()-1);
+        User oldest = users.stream()
+                //.max((us1, us2) -> us1.getAge().compareTo(us2.getAge()))
+                .max((us1, us2) -> us1.getAge().compareTo(us2.getAge()))
+                .get();
+        return oldest;
+//        List<User> sorted = users.stream()
+//                .sorted((a, b) -> a.getAge().compareTo(b.getAge()))
+//                .collect(Collectors.toList());
+//        return sorted.get(sorted.size()-1);
     }
 
     public static int sumAge(List<User> users) {
