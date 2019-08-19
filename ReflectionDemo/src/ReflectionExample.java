@@ -80,10 +80,11 @@ public class ReflectionExample {
         }
         //-----------Constructors----------------
 
-        Constructor[] constructors = clazz.getConstructors();
+        Constructor[] constructors = clazz.getDeclaredConstructors();
         for (Constructor c : constructors) {
             System.out.print(getModifiers(c.getModifiers()));
-            System.out.print(c.getName());
+            //System.out.print(c.getName());
+            System.out.print(clazz.getSimpleName()); // because the name of constructor and class is same
             System.out.print("(" + getParameters(c.getParameterTypes()) + ")" +" { }" + '\n');
         }
     }
